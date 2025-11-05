@@ -1,37 +1,58 @@
-from dotenv import load_dotenv
-from langchain_core.prompts import PromptTemplate
-from langchain_ollama import ChatOllama
-from langchain_openai import ChatOpenAI
-
-load_dotenv()
+from groq.groq import implement_compare_models, implement_set_api_key, check_api_key, implement_llama_4_model, \
+    implement_query_model, implement_llama_3_3_model
 
 
 def main():
-    print("Hello from langchain-course!")
-    information = """
-    Elon Reeve Musk (/ˈiːlɒn/ EE-lon; born June 28, 1971) is a businessman and entrepreneur known for his leadership of Tesla, SpaceX, Twitter, and xAI. Musk has been the wealthiest person in the world since 2021; as of October 2025, Forbes estimates his net worth to be US$500 billion.
-
-Born into a wealthy family in Pretoria, South Africa, Musk emigrated in 1989 to Canada; he had obtained Canadian citizenship at birth through his Canadian-born mother. He received bachelor's degrees in 1997 from the University of Pennsylvania in Philadelphia, United States, before moving to California to pursue business ventures. In 1995, Musk co-founded the software company Zip2. Following its sale in 1999, he co-founded X.com, an online payment company that later merged to form PayPal, which was acquired by eBay in 2002. That year, Musk also became an American citizen.
-
-In 2002, Musk founded the space technology company SpaceX, becoming its CEO and chief engineer; the company has since led innovations in reusable rockets and commercial spaceflight. Musk joined the automaker Tesla as an early investor in 2004 and became its CEO and product architect in 2008; it has since become a leader in electric vehicles. In 2015, he co-founded OpenAI to advance artificial intelligence (AI) research, but later left; growing discontent with the organization's direction and their leadership in the AI boom in the 2020s led him to establish xAI. In 2022, he acquired the social network Twitter, implementing significant changes, and rebranding it as X in 2023. His other businesses include the neurotechnology company Neuralink, which he co-founded in 2016, and the tunneling company the Boring Company, which he founded in 2017."""
-
-    summary_template = """
-    given the information {information} about a person, I want you to create:
-    1. A short summary
-    2. Two interesting facts about them
     """
+    Main function to test your implementations.
+    """
+    print("🚀 Groq Model Switching Exercise (LangChain Integration)")
+    print("=" * 55)
+    print("📝 This exercise simulates langchain-groq package behavior!")
+    print("🌐 Model names should match console.groq.com exactly")
+    print()
 
-    summary_prompt_template = PromptTemplate(
-        input_variables=["information"],
-        template=summary_template,
-    )
+    try:
+        # Test your set_api_key implementation
+        print("🔑 Setting API key...")
+        implement_set_api_key("mock_api_key_for_testing")
 
-    llm = ChatOpenAI(temperature=0,model="gpt-5-mini")
-    # llm = ChatOllama(temperature=0,model="gemma3:270m")
+        # Check if API key was set correctly
+        check_api_key()
+        print("✓ API key validation working!")
 
-    chain = summary_prompt_template | llm
-    response = chain.invoke(input={"information": information})
-    print(response.content)
+        # Test prompt
+        test_prompt = "Explain the concept of machine learning in one sentence."
+
+        # Test your model implementations
+        print(f"\n🤖 Testing your Llama 4 implementation:")
+        llama4 = implement_llama_4_model()
+        response4 = implement_query_model(llama4, test_prompt)
+        print(f"Llama 4: {response4}\n")
+
+        print(f"🤖 Testing your Llama 3.3 implementation:")
+        llama33 = implement_llama_3_3_model()
+        response33 = implement_query_model(llama33, test_prompt)
+        print(f"Llama 3.3: {response33}\n")
+
+        # Test your comparison implementation
+        print("🔄 Testing your model comparison:")
+        comparison = implement_compare_models(test_prompt)
+        print("Comparison results:")
+        for model, response in comparison.items():
+            print(f"  {model}: {response}")
+
+        print("\n🎉 All implementations working!")
+        print("✅ Great job implementing the LangChain-Groq patterns!")
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        if "GROQ_API_KEY" in str(e):
+            print("\n💡 Check your implement_set_api_key() function!")
+        else:
+            print("📝 Check your function implementations!")
+            print("🌐 Verify model names match console.groq.com exactly")
+
 
 if __name__ == "__main__":
     main()
